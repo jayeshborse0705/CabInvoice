@@ -12,7 +12,9 @@ namespace CabInvoiceGenerator
         public int pricePerKilometer;
         public int pricePerMinute;
         public int MinimumFare;
-        public int TotalFare;
+        public double TotalFare;
+        public int numOfRides;
+        public double averagePerRide;
         public InvoiceGenerator()
         {
             this.pricePerKilometer = 10;
@@ -31,5 +33,16 @@ namespace CabInvoiceGenerator
             }
             return Math.Max(MinimumFare, ride.distance * pricePerKilometer + ride.time * pricePerMinute);
         }
+        public double TotalFareForMultipleRideReturn(List<Ride> rides)
+        {
+            foreach (Ride ride in rides)
+            {
+                TotalFare += TotalFareForSingleRideReturn(ride);
+                numOfRides += 1;
+            }
+            averagePerRide = TotalFare / numOfRides;
+            return TotalFare;
+        }
+
     }
 }
