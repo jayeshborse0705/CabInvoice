@@ -1,6 +1,7 @@
 using CabGenerator;
 using CabInvoiceGenerator;
 using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace Cab
 {
@@ -41,6 +42,20 @@ namespace Cab
             Ride ride = new Ride(1, -1);
             InvoiceGeneratorException invoiceGeneratorException = Assert.Throws<InvoiceGeneratorException>(() => invoiceGenerator.TotalFareForSingleRideReturn(ride));
             Assert.AreEqual(invoiceGeneratorException.type, InvoiceGeneratorException.ExceptionType.INVALID_TIME);
+        }
+        //<summary>
+        //UC2: Checking for multiple rides and aggregate fare
+        //</summary>
+        [Test]
+        public void GivenListOfRides_CalculateFareForMultipleRides()
+        {
+            Ride ride1 = new Ride(2, 2);
+            Ride ride2 = new Ride(2, 1);
+
+            List<Ride> rides = new List<Ride>();
+            rides.Add(ride1);
+            rides.Add(ride2);
+            Assert.AreEqual(43.0d, invoiceGenerator.TotalFareForMultipleRideReturn(rides));
         }
     }
 }
