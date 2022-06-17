@@ -73,5 +73,34 @@ namespace Cab
             Assert.AreEqual(21.5d, invoiceGenerator.averagePerRide);
             Assert.AreEqual(2, invoiceGenerator.numOfRides);
         }
+        ///<summary>
+        ///UC4: Checking fare of user with valid UserId
+        ///</summary>
+        [Test]
+        public void GivenValidUser_GenerateInvoice()
+        {
+            Ride ride1 = new Ride(2, 2);
+            Ride ride2 = new Ride(2, 1);
+            rideRepository.AddRideRespository("RT", ride1);
+            rideRepository.AddRideRespository("RT", ride2);
+
+            Assert.AreEqual(43.0d, invoiceGenerator.TotalFareForMultipleRideReturn(rideRepository.returnListByUserId("RT")));
+            Assert.AreEqual(21.5d, invoiceGenerator.averagePerRide);
+            Assert.AreEqual(2, invoiceGenerator.numOfRides);
+        }
+        ///<summary>
+        ///TC4.1: Checking fare of user with Invalid UserId
+        ///</summary>
+        [Test]
+        public void GivenInValidUser_GenerateInvoice()
+        {
+            Ride ride1 = new Ride(2, 2);
+            Ride ride2 = new Ride(2, 1);
+            rideRepository.AddRideRespository("RT", ride1);
+            rideRepository.AddRideRespository("RT", ride2);
+
+            var Exception = Assert.Throws<InvoiceGeneratorException>(() => invoiceGenerator.TotalFareForMultipleRideReturn(rideRepository.returnListByUserId("TR")));
+            Assert.AreEqual(Exception.type, InvoiceGeneratorException.ExceptionType.INVALID_USER_ID);
+        }
     }
 }
